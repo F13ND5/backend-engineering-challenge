@@ -23,22 +23,27 @@ def parse_args():
     return parser.parse_args()
 
 
+# Function to calculate the average value
 def average(lst) -> float:
 	return round(mean(lst), 1) if lst else 0
 
 
+# Function to check the window size value
 def check_window_size(window_size):
     if window_size < 0 or not isinstance(window_size, int):
         raise ArgumentTypeError("'window_size' must be a positive integer.")
 
 
+# Function to load the input data from a file
 def load_data_from_file(file_path):
     with open(file_path) as f:
         data = json.load(f)
     return data
 
 
+# Function to verify and save the output to a file
 def save_payload_to_file(out_file, overwrite, payload):
+
     if not out_file:
         out_file = "output.json"
  
@@ -49,10 +54,10 @@ def save_payload_to_file(out_file, overwrite, payload):
         json.dump(payload, output_file, indent=1)
 
 
-# Define a function to calculate the moving average delivery time
+# Function to calculate the moving average delivery time
 def calculate_moving_average(data, window_size):
     
-    start_time = datetime.strptime(data[0]['timestamp'],'%Y-%m-%d %H:%M:%S.%f')  # Timestamp first translation
+    start_time = datetime.strptime(data[0]['timestamp'],'%Y-%m-%d %H:%M:%S.%f') # Timestamp first translation
     end_time = datetime.strptime(data[-1]['timestamp'],'%Y-%m-%d %H:%M:%S.%f') # Timestamp last translation
     delta = (end_time - start_time).total_seconds() /60 # Number of minutes between first and last translation
     time_window = timedelta(minutes = window_size)
@@ -95,6 +100,7 @@ def calculate_moving_average(data, window_size):
             else:
                 break
 		
+        # Add and structure the data for output
         event = {"date" : str(curr_time), "average_delivery_time" : average(lst_durations)}
         final_payload.append(event)
 
